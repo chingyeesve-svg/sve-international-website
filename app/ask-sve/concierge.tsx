@@ -27,6 +27,21 @@ export default function Concierge({topic,market,online}:{topic:string;market:str
     event.preventDefault()
     const form=event.currentTarget
     const data=new FormData(form)
+    if (!online) {
+      const details = [
+        ['Topic', data.get('topic')],
+        ['Name', data.get('name')],
+        ['Business email', data.get('email')],
+        ['Organisation', data.get('organisation')],
+        ['Jurisdiction', market],
+        ['Enquiry', data.get('purpose')],
+      ].filter(([, value]) => value).map(([label, value]) => label + ': ' + value)
+      const body = details.join('\r\n') + '\r\n\r\nPrivacy acknowledgement: Yes'
+      window.location.href = 'mailto:info@sve-int.com?subject=' +
+        encodeURIComponent('SVE enquiry: ' + data.get('topic')) + '&body=' + encodeURIComponent(body)
+      setStatus('Review and send the draft in your email app.')
+      return
+    }
     setSending(true);setSuccess(false);setStatus('')
     try{
       const res=await fetch('/api/enquiry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...Object.fromEntries(data),market,consent:data.get('consent')==='on'})})
@@ -63,9 +78,9 @@ export default function Concierge({topic,market,online}:{topic:string;market:str
         <label htmlFor="purpose">5. How can we help?</label><textarea id="purpose" name="purpose" required maxLength={1500} rows={3}/>
         <div className="honey" aria-hidden="true"><label htmlFor="website">Website</label><input id="website" name="website" tabIndex={-1} autoComplete="off"/></div>
         <label className="consent"><input type="checkbox" name="consent" required/><span>I agree that SVE International may use this information to review and respond to my enquiry. See our <a href="/privacy-policy">Privacy Policy</a>.</span></label>
-        {online?<button className="sve-button" disabled={sending}>{sending?'Sending…':'Submit enquiry'}</button>:
-        <p role="status">Online submission is unavailable. <a href={'mailto:info@sve-int.com?subject='+encodeURIComponent(topic||'SVE International enquiry')}>Email the SVE team</a>.</p>}
-        {status&&<p role={success?'status':'alert'}>{status}</p>}
+        <button className="sve-button" disabled={sending}>{sending ? 'Sending…' : online ? 'Submit enquiry' : 'Open email draft'}</button>
+        {!online&&<p>Review and send your enquiry to <a href="mailto:info@sve-int.com">info@sve-int.com</a> from your email app.</p>}
+        {status&&<p role={success||!online?'status':'alert'}>{status}</p>}
       </form>
     </section>
   </div>

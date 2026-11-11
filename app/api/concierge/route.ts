@@ -28,8 +28,8 @@ export async function POST(req:Request) {
     sources:sources.map(({title,href,text})=>({title,href,text})),
   })
   const key=process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN
-  const model=process.env.SVE_AI_MODEL
-  if(!key||!model||!matches.length) return fallback()
+  const model=process.env.SVE_AI_MODEL || 'openai/gpt-4.1-mini'
+  if(!key||!matches.length) return fallback()
   try {
     const result=await fetch('https://ai-gateway.vercel.sh/v1/chat/completions',{
       method:'POST',

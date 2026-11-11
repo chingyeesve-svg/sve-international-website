@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 export const metadata:Metadata = {
   title:{ default:'SVE International | Global Strategic Advisory',template:'%s | SVE International' },
   description:'Strategic advisory, governance and cross-border coordination for organisations navigating complex markets and consequential decisions.',
-  robots:{index:false,follow:false},
+  robots:{index:process.env.VERCEL_ENV==='production',follow:process.env.VERCEL_ENV==='production'},
 }
 const nav = [['About','about-sve'],['Expertise','expertise'],['Leadership','leadership'],['Global Presence','global-presence'],['Insights','insights'],['Contact','contact']]
 const footer = [['Group Ecosystem','group-ecosystem'],['Careers','careers'],['FAQs','frequently-asked-questions'],['Privacy Policy','privacy-policy'],['Terms of Use','terms-of-use'],['Website Disclaimer','website-disclaimer'],['Cookie Notice','cookie-notice'],['Terms of Business','terms-of-business'],['Accessibility','accessibility-statement'],['Scam Warning','scam-warning']]
