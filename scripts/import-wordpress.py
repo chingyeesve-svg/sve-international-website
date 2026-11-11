@@ -64,9 +64,9 @@ def transform(x):
             if not label: return card
             name=html.unescape(re.sub(r'<[^>]+>','',label[1])).strip()
             if name=='Other Jurisdictions':
-                card=card.replace('/contact?market=Other%20Jurisdictions','/other-jurisdictions')
+                card=card.replace('/contact?market=Other%20Jurisdictions','/other-jurisdictions').replace('>Contact us</a>','>Explore jurisdiction</a>')
             return card.replace('</div></article>',f'<a class="sp-market-card__link market-enquiry" href="/ask-sve?market={quote(name)}#enquiry">Contact us to explore</a></div></article>')
-        c=re.sub(r'<article class="sp-market-card".*?</article>',market_cta,c,flags=re.S)
+        c=re.sub(r'<article class="sp-market-card(?: [^"]*)?".*?</article>',market_cta,c,flags=re.S)
 
     c=re.sub(r'(<a\b[^>]*>)([^<]*?)\s*[↗→]\s*(</a>)',r'\1\2\3',c,flags=re.I)
     return {'id':x['id'],'slug':x['slug'],'title':html.unescape(x['title']),'html':c}
