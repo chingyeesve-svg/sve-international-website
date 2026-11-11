@@ -1,26 +1,27 @@
-# SVE International Corporate Website 2027 — initial implementation
+# SVE International Group Corporate Website 2027 · v0.1
 
-This repository was empty when the project was resumed on 9 November 2026. The first implementation adds a responsive Insights landing page and a five-question publication enquiry form.
+This Next.js migration uses the approved WordPress site as its reference. It includes the corporate and advisory pages, leadership profiles, 11 named jurisdictions plus the Other Jurisdictions pathway, and the Insights catalogue. WordPress and production DNS are outside this repository's deployment scope.
 
-## Current scope
-- SVE palette: Midnight Navy #091B3B, Royal Indigo #29358C, Signature Orange #F28C45, Cool White #F7F9FD.
-- Insights library scaffold with enquiry-led access (no automatic publication downloads).
-- Five questions: publication, name, work email, organisation, intended use.
-- Separate consent checkbox, spam honeypot, and server-side validation.
-- Vercel endpoint sends enquiry details to info@sve-int.com via Resend when configured.
+## Run
 
-## Deployment requirements
-1. Import this GitHub repository into Vercel. Deploy the root as a static site with the /api function.
-2. Configure RESEND_API_KEY and ENQUIRY_FROM_EMAIL in Vercel project environment variables. Verify the sender domain with Resend. Never commit credentials.
-3. Confirm inbox delivery and reply-to behavior with an end-to-end test. **Email delivery has not yet been verified.**
-4. Configure rate limiting and bot protection before public launch; the honeypot alone is insufficient.
-5. Approve and publish privacy notice and retention terms.
+```sh
+npm ci
+npm run build
+npm run start
+```
 
-## Outstanding content
-- Import approved publication titles, summaries and source links from the SVE Google Drive folders.
-- Exclude the two specifically withheld publications (“The Legal Pulse…” and “When Children Turn…”).
-- Replace the temporary text wordmark with the original approved SVE logo asset, after obtaining the actual asset.
-- Expand the remaining corporate pages based on approved website blueprint.
-- Review legal entity and regulatory wording before launch.
+The committed content snapshot is self-contained. The optional import script takes selected WordPress page and Insights exports named `wordpress-source.json` and `wordpress-insights.json` at the repository root; the raw exports are ignored. Assets in `public/media` replace matching WordPress filenames when the snapshot is regenerated.
 
-Do not represent the catalogue as complete until approved source material is imported.
+## Preview and release
+
+Deploy the migration branch to the existing Vercel project as a protected preview. The default search engine metadata prevents indexing during review.
+
+The migration uses the supplied SVE logo. The private WordPress media server returned HTTP 403 for its original media; `scripts/missing-media.json` lists the assets to import. Preview fallbacks are decorative. Restore the original SK Lai & Partners logo, leadership portraits, hero photographs and other editorial assets before public release.
+
+Publication catalogue entries are available; the article bodies remain in WordPress with editorial verification marked draft. Confirm clearance before including them in the release source. Publication requests go to Ask SVE with the selected publication prefilled; the site does not publish or automatically send the files.
+
+Configure `RESEND_API_KEY` and `ENQUIRY_FROM_EMAIL` in the Vercel project with a verified sender. The form checks five questions and privacy acknowledgement; delivery is disabled until the environment variables are present. Add platform rate limiting to the enquiry and AI endpoints before enabling them publicly. Verify a real submission reaches info@sve-int.com and the reply-to is correct. The form never displays a success message unless the email provider accepts the submission.
+
+Ask SVE can return links from the site directory without credentials. Set `SVE_AI_MODEL` to an approved Vercel AI Gateway model; use Vercel OIDC authentication or `AI_GATEWAY_API_KEY`. Verify live AI responses in the protected preview before enabling public access.
+
+Use Vercel deployment preview URLs for testing. Do not change the WordPress site or any production DNS setting.
