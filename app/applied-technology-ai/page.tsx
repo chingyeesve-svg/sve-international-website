@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './technology.css'
 
 export const metadata: Metadata = {
-  title: 'Applied Technology & AI | SVE International',
+  title: 'Applied Technology & AI',
   description: 'AI strategy, data governance and digital transformation advisory aligned with business outcomes, oversight and responsible implementation.',
 }
 
